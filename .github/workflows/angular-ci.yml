@@ -1,0 +1,38 @@
+name: Angular CI
+
+# Déclencheurs
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+# Définir les jobs
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Étape 1 : Cloner le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Étape 2 : Configurer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16' # Version de Node.js compatible avec Angular
+
+      # Étape 3 : Installer les dépendances
+      - name: Install dependencies
+        run: npm install
+
+      # Étape 4 : Construire l'application
+      - name: Build application
+        run: npm run build --if-present
+
+      # Étape 5 : Lancer les tests unitaires
+      - name: Run unit tests
+        run: npm test -- --watch=false --browsers=ChromeHeadless
